@@ -13,8 +13,8 @@ A Chrome extension that allows you to see which Twitter users do not follow you 
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Tokavic/twitter-unfollower-checker.git
-   cd twitter-unfollower-checker
+   git clone https://github.com/ctocamar/TwitterNonFollowerBackChromeExtension.git
+   cd TwitterNonFollowerBackChromeExtension
    ```
 2. **Load the extension in Chrome**:
    - Open `chrome://extensions/` in your browser.
