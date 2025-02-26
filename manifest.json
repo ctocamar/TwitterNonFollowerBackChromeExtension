@@ -1,0 +1,38 @@
+{
+    "name": "Twitter Non-Followers-Back",
+    "version": "0.2",
+    "manifest_version": 3,
+    "description": "Know what users does not follow you back on twitter.",
+    "permissions": [
+        "activeTab",
+        "cookies",
+        "storage"
+    ],
+    "host_permissions": [
+        "https://x.com/*",
+        "https://twitter.com/*"
+    ],
+    "author": "Christian Toca @tokavicLol",
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://twitter.com/*", "https://x.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_title": "Who does not follow you back",
+        "default_icon": {
+            "16": "icon.png",
+            "48": "icon.png",
+            "128": "icon.png"
+        }
+    },
+    "icons": {
+        "16": "icon.png",
+        "48": "icon.png",
+        "128": "icon.png"
+    }
+}
