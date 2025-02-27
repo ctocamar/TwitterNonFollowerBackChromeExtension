@@ -34,30 +34,37 @@ function getFeatures() {
   };
 }
 
-async function fetchUsers(cursor, variables, features, csrfToken, notFollowing, maxAttempts) {
+async function fetchUsers(cursor, variables, features, csrfToken, notFollowing, maxAttempts, url) {
   do {
     if (cursor) variables["cursor"] = cursor;
 
-    const url = createUrl(variables, features);
+    const followingUrl = createUrl(url, variables, features);
 
     const headers = createHeaders(csrfToken);
 
     try {
-      const response = await fetch(url, { method: "GET", headers, credentials: "include" });
-      const data = await response.json();
-      const users = getUsersFromData(data);
+      const followingResponse = await fetch(followingUrl, { method: "GET", headers, credentials: "include" });
+      const followingData = await followingResponse.json();
+      const followingUsers = getUsersFromData(followingData);
 
-      users.forEach((user) => {
+
+      followingUsers.forEach((user) => {
         const profile = user.content.itemContent?.user_results.result;
 
         if (!profile) {
           if (user.content.cursorType === "Bottom") cursor = user.content.value;
           return;
         }
-
-        if (!profile?.legacy?.followed_by) {
-          notFollowing.push(`@${profile.legacy.screen_name}`);
+        if(url.includes('Following')){
+          if (!profile?.legacy?.followed_by) {
+            notFollowing.push(`@${profile.legacy.screen_name}`);
+          }
+        }else if (url.includes('Followers')){
+          if (!profile?.legacy?.following) {
+            notFollowing.push(`@${profile.legacy.screen_name}`);
+          }
         }
+
       });
     } catch (error) {
       console.error("Request error:", error);
@@ -65,11 +72,12 @@ async function fetchUsers(cursor, variables, features, csrfToken, notFollowing, 
   } while (cursor && !cursor.startsWith("0|") && maxAttempts-- > 0);
 }
 
-function createUrl(variables, features) {
-  return `https://x.com/i/api/graphql/o5eNLkJb03ayTQa97Cpp7w/Following?variables=${encodeURIComponent(
+function createUrl(url, variables, features) {
+  return `${url}?variables=${encodeURIComponent(
     JSON.stringify(variables)
   )}&features=${encodeURIComponent(JSON.stringify(features))}`;
 }
+
 
 function createHeaders(csrfToken) {
   return {
