@@ -19,7 +19,7 @@
     "content_scripts": [
         {
             "matches": ["https://twitter.com/*", "https://x.com/*"],
-            "js": ["content.js"]
+            "js": ["content.js", "utils.js", "popup.js"]
         }
     ],
     "action": {
